@@ -13,6 +13,4 @@ public enum EventType {
     TOUCH_UP,
     TOUCH_DOWN,
     TOUCH_DRAGGED,
-    KEY_DOWN,
-    KEY_UP,
 }

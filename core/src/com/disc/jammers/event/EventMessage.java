@@ -5,7 +5,6 @@
  */
 package com.disc.jammers.event;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +33,14 @@ public class EventMessage {
     
     public int[] getIntArray(EventType type){
         return (int[]) messageInput.get(type);
+    }
+    
+    public float getFloat(EventType type){
+        return (Float) messageInput.get(type);
+    }
+    
+    public boolean getBoolean(EventType type){
+        return (Boolean) messageInput.get(type);
     }
 }
 
