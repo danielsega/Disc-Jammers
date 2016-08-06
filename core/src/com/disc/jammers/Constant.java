@@ -27,5 +27,7 @@ public class Constant {
     //Fixture ID
     public static final String GROUND = "ground";
     public static final String DISC = "disc";
+    public static final String PLAYER_A = "playerA";
+    public static final String PLAYER_B = "playerB";
 }
 

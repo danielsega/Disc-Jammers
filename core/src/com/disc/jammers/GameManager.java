@@ -5,10 +5,13 @@
  */
 package com.disc.jammers;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.disc.jammers.boxdisplay.BoxDisplay;
 import com.disc.jammers.boxdisplay.Disc;
+import com.disc.jammers.boxdisplay.Player;
+import com.disc.jammers.boxdisplay.players.PlayerScott;
 import com.disc.jammers.event.EventQueue;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,13 +22,14 @@ import java.util.Map;
  */
 public class GameManager {
 
+    private final AssetManager assetManager;
+
     private EventQueue eventQueue;
-
     private LinkedHashMap<String, BoxDisplay> box2dSprite;
-
     private World world;
 
     public GameManager(World world, EventQueue queue) {
+        assetManager = new AssetManager();
         box2dSprite = new LinkedHashMap<String, BoxDisplay>();
         eventQueue = queue;
         this.world = world;
@@ -37,15 +41,11 @@ public class GameManager {
         return box2dSprite.get(id);
     }
 
-    private void setBox2dSprite() {
-        box2dSprite.put(Constant.DISC, new Disc(world, eventQueue));
-    }
-
     public void handleEvents() {
         while (!eventQueue.getQueue().isEmpty()) {
             for (Map.Entry<String, BoxDisplay> entry : box2dSprite.entrySet()) {
                 BoxDisplay value = entry.getValue();
-                value.handleEvents(eventQueue.sendEvent());                
+                value.handleEvents(eventQueue.sendEvent());
             }
             eventQueue.removeEvent();
         }
@@ -73,4 +73,8 @@ public class GameManager {
         }
     }
 
+    private void setBox2dSprite() {
+        box2dSprite.put(Constant.DISC, new Disc(world, eventQueue));
+        box2dSprite.put(Constant.PLAYER_A, new PlayerScott(world, eventQueue));
+    }
 }

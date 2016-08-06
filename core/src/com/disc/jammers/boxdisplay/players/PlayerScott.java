@@ -5,7 +5,13 @@
  */
 package com.disc.jammers.boxdisplay.players;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import static com.disc.jammers.Constant.PIXEL_PER_METER;
+import static com.disc.jammers.Constant.WIDTH;
 import com.disc.jammers.boxdisplay.Disc;
 import com.disc.jammers.boxdisplay.Player;
 import com.disc.jammers.entity.Country;
@@ -15,23 +21,44 @@ import com.disc.jammers.event.EventQueue;
  *
  * @author daniel
  */
-public class PlayerScott extends Player{
-    
+public class PlayerScott extends Player {
+
     public PlayerScott(World world, EventQueue queue) {
         super(world, queue);
         
+        initData();
+        createPlayerBox(world);
+    }
+
+    private void initData(){
         firstName = "Scott";
-        lastName  = "Walker";
-        
+        lastName = "Walker";
+
         country = Country.USA;
-        
+
         throwingSpeed = 8;
         curvePower = 4;
-        slidePower = 3;        
+        slidePower = 3;
         dexterity = 3;
-        
+
         overallPower = 8;
         overallPower = 3;
     }
     
+    private void createPlayerBox(World world) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set((WIDTH / 2) / PIXEL_PER_METER, 100 / PIXEL_PER_METER);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body bottomBody = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(300 / PIXEL_PER_METER, 2 / PIXEL_PER_METER);
+        FixtureDef fdef = new FixtureDef();
+        fdef.shape = shape;
+        fdef.density = 1f;
+        fdef.filter.categoryBits = 2;
+        bottomBody.createFixture(fdef);
+
+        shape.dispose();
+    }
 }

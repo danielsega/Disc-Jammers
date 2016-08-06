@@ -69,16 +69,15 @@ public class StatePlay extends State {
 
     @Override
     public void handleEvents() {
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            manager.getBox2dSprite(Constant.DISC).handleEvents(new EventMessage(EventType.TOUCH_UP, 20));
-            System.out.println("Space Bar Pressed");
-        }
+        manager.handleEvents();
     }
 
     @Override
     public void update(float dt) {
         world.step(dt, 6, 2);
         camera.update();
+        
+        manager.update(dt);
     }
 
     @Override
@@ -87,13 +86,12 @@ public class StatePlay extends State {
         debugMatrix = sb.getProjectionMatrix().cpy().scale(PIXEL_PER_METER, PIXEL_PER_METER, 0);
         b2dr.render(world, debugMatrix);
         
-        //sb.begin();
-        //sb.draw(tempBackground, 0, 0);
-        //sb.end();
+        manager.render(sb);
     }
 
     @Override
     public void dispose() {
+        manager.dispose();
     }
 
     private void createBoxBoundaries() {
