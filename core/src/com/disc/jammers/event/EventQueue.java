@@ -20,6 +20,10 @@ public class EventQueue {
         eventQueue = new LinkedList<EventMessage>();
     }
     
+    public Queue getQueue(){
+        return eventQueue;
+    }
+    
     public void addEvent(EventMessage message){
         eventQueue.add(message);
     }

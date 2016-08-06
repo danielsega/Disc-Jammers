@@ -7,19 +7,27 @@ package com.disc.jammers.boxdisplay;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.disc.jammers.event.EventMessage;
+import com.disc.jammers.event.EventQueue;
 
 /**
  *
  * @author daniel
  */
-public interface BoxDisplay {
+public abstract class BoxDisplay {
 
-    public void handleEvents(EventMessage message);
+    protected EventQueue eventQueue;
+    
+    public BoxDisplay(EventQueue queue) {
+        eventQueue = queue;
+    }
 
-    public void update(float dt);
+    
+    public abstract void handleEvents(EventMessage message);
 
-    public void render(SpriteBatch sb);
+    public abstract void update(float dt);
 
-    public void dispose();
+    public abstract void render(SpriteBatch sb);
+
+    public abstract void dispose();
     
 }

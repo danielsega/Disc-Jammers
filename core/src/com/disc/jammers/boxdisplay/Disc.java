@@ -17,13 +17,14 @@ import static com.disc.jammers.Constant.HEIGHT;
 import static com.disc.jammers.Constant.PIXEL_PER_METER;
 import static com.disc.jammers.Constant.WIDTH;
 import com.disc.jammers.event.EventMessage;
+import com.disc.jammers.event.EventQueue;
 import com.disc.jammers.event.EventType;
 
 /**
  *
  * @author daniel
  */
-public class Disc implements BoxDisplay {
+public class Disc extends BoxDisplay {
 
     public boolean isCaught;
     public boolean isFlying;
@@ -33,7 +34,8 @@ public class Disc implements BoxDisplay {
 
     private Body discBody;
 
-    public Disc(World world) {
+    public Disc(World world, EventQueue queue) {
+        super(queue);
         createBox2dDisc(world);
     }
 

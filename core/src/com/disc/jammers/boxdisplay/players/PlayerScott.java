@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.disc.jammers.boxdisplay.Disc;
 import com.disc.jammers.boxdisplay.Player;
 import com.disc.jammers.entity.Country;
+import com.disc.jammers.event.EventQueue;
 
 /**
  *
@@ -16,8 +17,8 @@ import com.disc.jammers.entity.Country;
  */
 public class PlayerScott extends Player{
     
-    public PlayerScott(World world, Disc disc) {
-        super(world, disc);
+    public PlayerScott(World world, EventQueue queue) {
+        super(world, queue);
         
         firstName = "Scott";
         lastName  = "Walker";

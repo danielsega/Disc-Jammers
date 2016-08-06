@@ -13,7 +13,10 @@ import com.badlogic.gdx.InputProcessor;
  */
 public class MyInputProcessor implements InputProcessor {
 
-    public MyInputProcessor() {
+    private EventQueue eventQueue;
+    
+    public MyInputProcessor(EventQueue queue) {
+        eventQueue = queue;
     }
 
     @Override

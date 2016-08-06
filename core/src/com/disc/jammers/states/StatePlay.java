@@ -23,9 +23,12 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.disc.jammers.Constant;
+import com.disc.jammers.GameManager;
 import com.disc.jammers.GameStateManager;
 import com.disc.jammers.boxdisplay.Disc;
 import com.disc.jammers.event.EventMessage;
+import com.disc.jammers.event.EventQueue;
 import com.disc.jammers.event.EventType;
 import com.disc.jammers.event.MyContactListener;
 
@@ -40,21 +43,25 @@ public class StatePlay extends State {
     private Matrix4 debugMatrix;
 
     private Texture tempBackground;
+    private GameManager manager;
     
-    private Disc disc;
+    private EventQueue eventQueue;
     
     public StatePlay(GameStateManager gsm) {
         super(gsm);
+        
         camera.setToOrtho(false, WIDTH, HEIGHT);
-        Gdx.input.setInputProcessor(new MyInputProcessor());
+        Gdx.input.setInputProcessor(new MyInputProcessor(eventQueue));
         
         //Box2d Initialization
         world = new World(new Vector2(0, 0), true);
-        world.setContactListener(new MyContactListener());
+        world.setContactListener(new MyContactListener(eventQueue));
         b2dr = new Box2DDebugRenderer();
         
+        eventQueue = new EventQueue();
+        manager = new GameManager(world, eventQueue);
+        
         //--Sprites
-        disc = new Disc(world);
         
         createBoxBoundaries();
         tempBackground = new Texture("court.png");
@@ -63,7 +70,7 @@ public class StatePlay extends State {
     @Override
     public void handleEvents() {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            disc.handleEvents(new EventMessage(EventType.TOUCH_UP, 20));
+            manager.getBox2dSprite(Constant.DISC).handleEvents(new EventMessage(EventType.TOUCH_UP, 20));
             System.out.println("Space Bar Pressed");
         }
     }

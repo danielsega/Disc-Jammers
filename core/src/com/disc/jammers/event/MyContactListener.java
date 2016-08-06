@@ -16,7 +16,10 @@ import com.badlogic.gdx.physics.box2d.Manifold;
  */
 public class MyContactListener implements ContactListener {
 
-    public MyContactListener() {
+    private EventQueue eventQueue;
+    
+    public MyContactListener(EventQueue queue) {
+        eventQueue = queue;
     }
 
     @Override

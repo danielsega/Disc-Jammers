@@ -13,26 +13,44 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import static com.disc.jammers.Constant.PIXEL_PER_METER;
 import static com.disc.jammers.Constant.WIDTH;
-import com.disc.jammers.entity.Entity;
+import com.disc.jammers.entity.Country;
+import com.disc.jammers.entity.Level;
+import com.disc.jammers.entity.SpecialMoveType;
 import com.disc.jammers.event.EventMessage;
+import com.disc.jammers.event.EventQueue;
 import com.disc.jammers.event.EventType;
 
 /**
  *
  * @author daniel
  */
-public class Player extends Entity implements BoxDisplay {
+public class Player extends BoxDisplay {
 
-    private Disc disc;
-
-    public Player(World world, Disc disc) {
-        this.disc = disc;
+    protected String firstName;
+    protected String lastName;
+    
+    protected Country country;
+    
+    protected Level level;
+    
+    protected int throwingSpeed;   
+    protected int curvePower;
+    protected int slidePower;
+    
+    protected int dexterity;
+    
+    protected int overallSpeed;
+    protected int overallPower;
+    
+    public SpecialMoveType special;
+    
+    public Player(World world, EventQueue queue) {
+        super(queue);
         createPlayerBox(world);
     }
 
     @Override
     public void handleEvents(EventMessage message) {
-        if (!disc.isCaught) {
             
             //Move to Location
             if (message.getMap().containsKey(EventType.TOUCH_UP)) {
@@ -41,18 +59,14 @@ public class Player extends Entity implements BoxDisplay {
             //Slide to location
             if (message.getMap().containsKey(EventType.TOUCH_DRAGGED)) {
             }
-        }
     }
 
-    @Override
     public void update(float dt) {
     }
 
-    @Override
     public void render(SpriteBatch sb) {
     }
 
-    @Override
     public void dispose() {
     }
 
