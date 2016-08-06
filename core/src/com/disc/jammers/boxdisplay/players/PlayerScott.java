@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.disc.jammers.Constant;
 import static com.disc.jammers.Constant.PIXEL_PER_METER;
 import static com.disc.jammers.Constant.WIDTH;
 import com.disc.jammers.boxdisplay.Disc;
@@ -47,12 +48,12 @@ public class PlayerScott extends Player {
     
     private void createPlayerBox(World world) {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((WIDTH / 2) / PIXEL_PER_METER, 100 / PIXEL_PER_METER);
+        bodyDef.position.set((WIDTH / 4) / PIXEL_PER_METER, (Constant.HEIGHT / 4) / PIXEL_PER_METER);
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body bottomBody = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(300 / PIXEL_PER_METER, 2 / PIXEL_PER_METER);
+        shape.setAsBox(50 / PIXEL_PER_METER, 50 / PIXEL_PER_METER);
         FixtureDef fdef = new FixtureDef();
         fdef.shape = shape;
         fdef.density = 1f;

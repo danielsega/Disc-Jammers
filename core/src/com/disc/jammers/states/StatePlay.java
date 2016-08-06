@@ -49,6 +49,7 @@ public class StatePlay extends State {
     
     public StatePlay(GameStateManager gsm) {
         super(gsm);
+        eventQueue = new EventQueue();
         
         camera.setToOrtho(false, WIDTH, HEIGHT);
         Gdx.input.setInputProcessor(new MyInputProcessor(eventQueue));
@@ -58,9 +59,8 @@ public class StatePlay extends State {
         world.setContactListener(new MyContactListener(eventQueue));
         b2dr = new Box2DDebugRenderer();
         
-        eventQueue = new EventQueue();
-        manager = new GameManager(world, eventQueue);
         
+        manager = new GameManager(world, eventQueue);
         //--Sprites
         
         createBoxBoundaries();

@@ -5,6 +5,7 @@
  */
 package com.disc.jammers.event;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 /**
@@ -26,6 +27,9 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if(keycode ==  Input.Keys.SPACE){
+            eventQueue.addEvent(new EventMessage(EventType.TOUCH_UP, 20));
+        }
         return false;
     }
 
