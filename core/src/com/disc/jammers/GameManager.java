@@ -22,14 +22,11 @@ import java.util.Map;
  */
 public class GameManager {
 
-    private final AssetManager assetManager;
-
     private EventQueue eventQueue;
     private LinkedHashMap<String, BoxDisplay> box2dSprite;
     private World world;
 
     public GameManager(World world, EventQueue queue) {
-        assetManager = new AssetManager();
         box2dSprite = new LinkedHashMap<String, BoxDisplay>();
         eventQueue = queue;
         this.world = world;

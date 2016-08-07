@@ -5,9 +5,11 @@
  */
 package com.disc.jammers.boxdisplay;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.disc.jammers.event.EventMessage;
 import com.disc.jammers.event.EventQueue;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,10 +17,14 @@ import com.disc.jammers.event.EventQueue;
  */
 public abstract class BoxDisplay {
 
+    
     protected EventQueue eventQueue;
+    protected ArrayList<BoxDisplayResidence> residence;
+    protected ArrayList<AssetDescriptor> assetList;
     
     public BoxDisplay(EventQueue queue) {
         eventQueue = queue;
+        residence = new ArrayList<BoxDisplayResidence>();
     }
 
     
@@ -30,4 +36,10 @@ public abstract class BoxDisplay {
 
     public abstract void dispose();
     
+    protected ArrayList<AssetDescriptor> getAssetList(){
+        if(!assetList.isEmpty()){
+            return assetList;
+        }
+        return null;
+    }
 }

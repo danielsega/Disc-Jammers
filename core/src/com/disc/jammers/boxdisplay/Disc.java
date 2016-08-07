@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.disc.jammers.Constant;
@@ -37,6 +36,8 @@ public class Disc extends BoxDisplay {
     public Disc(World world, EventQueue queue) {
         super(queue);
         createBox2dDisc(world);
+
+        residence.add(BoxDisplayResidence.PLAY);
     }
 
     @Override
@@ -44,17 +45,6 @@ public class Disc extends BoxDisplay {
 
         if (message.getMap().containsKey(EventType.TOUCH_UP)) {
             discBody.applyForceToCenter(message.getInt(EventType.TOUCH_UP), message.getInt(EventType.TOUCH_UP), isCaught);
-        }
-
-        if (isCaught) {
-
-            if (message.getMap().containsKey(EventType.TOUCH_DOWN)) {
-                message.getMap().get(EventType.TOUCH_DOWN);
-            }
-
-            if (message.getMap().containsKey(EventType.TOUCH_DRAGGED)) {
-            }
-
         }
 
     }
@@ -96,4 +86,5 @@ public class Disc extends BoxDisplay {
 
         circle.dispose();
     }
+
 }

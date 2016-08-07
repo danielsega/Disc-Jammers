@@ -27,6 +27,10 @@ public class EventMessage {
         return messageInput;
     }
     
+    public Object getObject(EventType type){
+        return messageInput.get(type);
+    }
+    
     public int getInt(EventType type){
         return (Integer)messageInput.get(type);
     }
