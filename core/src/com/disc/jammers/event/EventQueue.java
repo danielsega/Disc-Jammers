@@ -25,7 +25,9 @@ public class EventQueue {
     }
     
     public void addEvent(EventMessage message){
-        eventQueue.add(message);
+        if(!eventQueue.contains(message) || eventQueue.contains(EventType.TOUCH_DRAGGED)){
+            eventQueue.add(message);
+        }
     }
     
     public EventMessage sendEvent(){

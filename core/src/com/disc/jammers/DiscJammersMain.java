@@ -5,17 +5,23 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.disc.jammers.states.StateDirector;
+import com.disc.jammers.states.StateID;
 
 public class DiscJammersMain extends ApplicationAdapter {
 
     private GameStateManager gsm;
     private SpriteBatch batch;
 
+    private StateDirector stateDirector;
+    
     @Override
     public void create() {
         batch = new SpriteBatch();
         gsm = new GameStateManager();
-        gsm.push(new StatePlay(gsm));
+        stateDirector = new StateDirector(gsm);
+        
+        gsm.push(stateDirector.getState(StateID.PLAY));
     }
 
     @Override

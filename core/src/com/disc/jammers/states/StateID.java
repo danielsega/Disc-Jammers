@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.disc.jammers.event;
+package com.disc.jammers.states;
 
 /**
  *
  * @author daniel
  */
-public enum EventType {
-    TOUCH_UP,
-    TOUCH_DOWN,
-    TOUCH_DRAGGED,
-    KEY_UP,
-    KEY_DOWN,
+public enum StateID {
+    PLAY
 }

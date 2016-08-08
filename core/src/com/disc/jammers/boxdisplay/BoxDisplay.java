@@ -25,6 +25,7 @@ public abstract class BoxDisplay {
     public BoxDisplay(EventQueue queue) {
         eventQueue = queue;
         residence = new ArrayList<BoxDisplayResidence>();
+        assetList = new ArrayList<AssetDescriptor>();
     }
 
     
@@ -36,8 +37,8 @@ public abstract class BoxDisplay {
 
     public abstract void dispose();
     
-    protected ArrayList<AssetDescriptor> getAssetList(){
-        if(!assetList.isEmpty()){
+    public ArrayList<AssetDescriptor> getAssetList(){
+        if(!assetList.isEmpty() || assetList != null){
             return assetList;
         }
         return null;

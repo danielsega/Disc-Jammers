@@ -44,7 +44,7 @@ public class Disc extends BoxDisplay {
     public void handleEvents(EventMessage message) {
 
         if (message.getMap().containsKey(EventType.TOUCH_UP)) {
-            discBody.applyForceToCenter(message.getInt(EventType.TOUCH_UP), message.getInt(EventType.TOUCH_UP), isCaught);
+            discBody.applyForceToCenter(message.getIntArray(EventType.TOUCH_UP)[0], message.getIntArray(EventType.TOUCH_UP)[1], false);
         }
 
     }

@@ -27,9 +27,6 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode ==  Input.Keys.SPACE){
-            eventQueue.addEvent(new EventMessage(EventType.TOUCH_UP, 20));
-        }
         return false;
     }
 
@@ -40,16 +37,22 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        int[] mouse = {screenX, screenY, pointer, button};        
+        eventQueue.addEvent(new EventMessage(EventType.TOUCH_DOWN, mouse));
+        return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        int[] mouse = {screenX, screenY, pointer, button};        
+        eventQueue.addEvent(new EventMessage(EventType.TOUCH_UP, mouse));
+        return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        int[] mouse = {screenX, screenY, pointer};        
+        eventQueue.addEvent(new EventMessage(EventType.TOUCH_DRAGGED, mouse));
         return false;
     }
 

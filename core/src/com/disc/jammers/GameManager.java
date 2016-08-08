@@ -5,14 +5,18 @@
  */
 package com.disc.jammers;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
+import com.disc.jammers.assets.AssetHolder;
 import com.disc.jammers.boxdisplay.BoxDisplay;
 import com.disc.jammers.boxdisplay.Disc;
 import com.disc.jammers.boxdisplay.Player;
 import com.disc.jammers.boxdisplay.players.PlayerScott;
 import com.disc.jammers.event.EventQueue;
+import com.disc.jammers.states.StateID;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,27 +29,27 @@ public class GameManager {
     private final AssetManager assetManager;
 
     private EventQueue eventQueue;
-    private LinkedHashMap<String, BoxDisplay> box2dSprite;
+    private ArrayList<BoxDisplay> box2dSprites;
     private World world;
+    private AssetHolder assetHolder;
 
     public GameManager(World world, EventQueue queue) {
         assetManager = new AssetManager();
-        box2dSprite = new LinkedHashMap<String, BoxDisplay>();
-        eventQueue = queue;
+        box2dSprites = new ArrayList<BoxDisplay>();
+        assetHolder = new AssetHolder(world, queue);
+
+        this.eventQueue = queue;
         this.world = world;
 
         setBox2dSprite();
-    }
-
-    public BoxDisplay getBox2dSprite(String id) {
-        return box2dSprite.get(id);
+        initAssetManager();
+        assetManager.finishLoading();
     }
 
     public void handleEvents() {
         while (!eventQueue.getQueue().isEmpty()) {
-            for (Map.Entry<String, BoxDisplay> entry : box2dSprite.entrySet()) {
-                BoxDisplay value = entry.getValue();
-                value.handleEvents(eventQueue.sendEvent());
+            for (BoxDisplay sprites : box2dSprites) {
+                sprites.handleEvents(eventQueue.sendEvent());
             }
             eventQueue.removeEvent();
         }
@@ -53,28 +57,37 @@ public class GameManager {
 
     public void update(float dt) {
         //--Update Every Box2dSprite
-        for (Map.Entry<String, BoxDisplay> entry : box2dSprite.entrySet()) {
-            BoxDisplay value = entry.getValue();
-            value.update(dt);
+        for (BoxDisplay sprites : box2dSprites) {
+            sprites.update(dt);
         }
     }
 
     public void render(SpriteBatch sb) {
-        for (Map.Entry<String, BoxDisplay> entry : box2dSprite.entrySet()) {
-            BoxDisplay value = entry.getValue();
-            value.render(sb);
+        for (BoxDisplay sprites : box2dSprites) {
+            sprites.render(sb);
         }
     }
 
     public void dispose() {
-        for (Map.Entry<String, BoxDisplay> entry : box2dSprite.entrySet()) {
-            BoxDisplay value = entry.getValue();
-            value.dispose();
+        for (BoxDisplay sprites : box2dSprites) {
+            sprites.dispose();
         }
     }
 
     private void setBox2dSprite() {
-        box2dSprite.put(Constant.DISC, new Disc(world, eventQueue));
-        box2dSprite.put(Constant.PLAYER_A, new PlayerScott(world, eventQueue));
+        box2dSprites = assetHolder.getBoxDisplyByState(StateID.PLAY);
+    }
+
+    private void initAssetManager() {
+        //Check Every elemets in boxsprite
+        for (BoxDisplay sprite : box2dSprites) {
+            
+            //Check if it's null or empty
+            if (!sprite.getAssetList().isEmpty() || sprite.getAssetList() != null) {
+                for (AssetDescriptor desc : sprite.getAssetList()) {
+                    assetManager.load(desc);
+                }
+            }
+        }
     }
 }
