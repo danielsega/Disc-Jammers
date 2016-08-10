@@ -5,6 +5,10 @@
  */
 package com.disc.jammers.boxdisplay;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -31,30 +35,49 @@ public class Disc extends BoxDisplay {
     private int startX;
     private int startY;
 
+    private final String picFileName = "disc.png";
+    
     private Body discBody;
 
-    public Disc(World world, EventQueue queue) {
-        super(queue);
-        createBox2dDisc(world);
-
-        residence.add(BoxDisplayResidence.PLAY);
+    private Texture discTex;
+    private Sprite discSprite;
+    
+    private World world;
+    
+    public Disc(World world, EventQueue queue, AssetManager manager) {
+        super(queue, manager);
+        
+        this.world = world;
+        assetDesc = new AssetDescriptor(picFileName, Texture.class);
     }
 
     @Override
     public void handleEvents(EventMessage message) {
 
         if (message.getMap().containsKey(EventType.TOUCH_UP)) {
-            discBody.applyForceToCenter(message.getIntArray(EventType.TOUCH_UP)[0], message.getIntArray(EventType.TOUCH_UP)[1], false);
+            discBody.setLinearVelocity(message.getIntArray(EventType.TOUCH_UP)[0] / PIXEL_PER_METER, message.getIntArray(EventType.TOUCH_UP)[1] / PIXEL_PER_METER);
+            isCaught = false;
         }
 
+        if (message.getMap().containsKey(EventType.STOP_DISC)) {
+            isCaught = true;
+            discBody.setAngularVelocity(0);
+            discBody.setLinearVelocity(0,0);
+        }
     }
 
     @Override
     public void update(float dt) {
+        
+        discSprite.setPosition((discBody.getPosition().x * PIXEL_PER_METER) - (discSprite.getWidth() / 2)
+                , (discBody.getPosition().y * PIXEL_PER_METER) - (discSprite.getHeight() / 2));
     }
 
     @Override
     public void render(SpriteBatch sb) {
+        sb.begin();
+        discSprite.draw(sb);
+        sb.end();
     }
 
     @Override
@@ -65,6 +88,17 @@ public class Disc extends BoxDisplay {
         discBody.applyForceToCenter(x, y, true);
     }
 
+
+    @Override
+    public void init() {
+        discTex = assetManager.get(picFileName);
+        discSprite = new Sprite(discTex);
+        
+        createBox2dDisc(this.world);
+        initDiscSprite();
+    }
+
+    
     private void createBox2dDisc(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((WIDTH / 2) / PIXEL_PER_METER, (HEIGHT / 2) / PIXEL_PER_METER);
@@ -74,17 +108,22 @@ public class Disc extends BoxDisplay {
         discBody.setLinearVelocity(2, 0);
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(20 / PIXEL_PER_METER);
+        circle.setRadius(((discSprite.getWidth() / 4) + (discSprite.getHeight()/ 4)) / PIXEL_PER_METER);
         FixtureDef fdef = new FixtureDef();
         fdef.shape = circle;
         //fdef.isSensor = true;
         fdef.density = 1f;
         fdef.friction = 0;
         fdef.restitution = 1f;
-        fdef.filter.categoryBits = 2;
-        discBody.createFixture(fdef).setUserData(Constant.DISC);
-
+        fdef.filter.categoryBits = Constant.BIT_DISC;
+        fdef.filter.maskBits = Constant.BIT_PLAYERS | Constant.BIT_BOUNDARY;
+        fixture = discBody.createFixture(fdef);
+        fixture.setUserData(Constant.DISC);
+        
         circle.dispose();
     }
-
+    
+    private void initDiscSprite(){
+        discSprite.setOriginCenter();
+    }
 }

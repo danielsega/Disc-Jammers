@@ -37,7 +37,8 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        int[] mouse = {screenX, screenY, pointer, button};        
+        int[] mouse = {screenX, screenY, pointer, button};
+        System.out.println("Touch Down: " + mouse[0] + " " + mouse[1] + " " + mouse[2] + " " + mouse[3]);
         eventQueue.addEvent(new EventMessage(EventType.TOUCH_DOWN, mouse));
         return true;
     }
@@ -45,6 +46,7 @@ public class MyInputProcessor implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int[] mouse = {screenX, screenY, pointer, button};        
+        System.out.println("Touch Up: " + mouse[0] + " " + mouse[1] + " " + mouse[2] + " " + mouse[3]);
         eventQueue.addEvent(new EventMessage(EventType.TOUCH_UP, mouse));
         return true;
     }
@@ -52,6 +54,7 @@ public class MyInputProcessor implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         int[] mouse = {screenX, screenY, pointer};        
+        System.out.println("Touch Dragged: " + mouse[0] + " " + mouse[1] + " " + mouse[2]);
         eventQueue.addEvent(new EventMessage(EventType.TOUCH_DRAGGED, mouse));
         return false;
     }

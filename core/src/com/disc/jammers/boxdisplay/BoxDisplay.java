@@ -6,10 +6,11 @@
 package com.disc.jammers.boxdisplay;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.disc.jammers.event.EventMessage;
 import com.disc.jammers.event.EventQueue;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,15 +18,14 @@ import java.util.ArrayList;
  */
 public abstract class BoxDisplay {
 
-    
+    protected AssetManager assetManager;
     protected EventQueue eventQueue;
-    protected ArrayList<BoxDisplayResidence> residence;
-    protected ArrayList<AssetDescriptor> assetList;
+    protected AssetDescriptor assetDesc;
+    protected Fixture fixture;
     
-    public BoxDisplay(EventQueue queue) {
+    public BoxDisplay(EventQueue queue, AssetManager manager) {
         eventQueue = queue;
-        residence = new ArrayList<BoxDisplayResidence>();
-        assetList = new ArrayList<AssetDescriptor>();
+        assetManager = manager;
     }
 
     
@@ -37,10 +37,18 @@ public abstract class BoxDisplay {
 
     public abstract void dispose();
     
-    public ArrayList<AssetDescriptor> getAssetList(){
-        if(!assetList.isEmpty() || assetList != null){
-            return assetList;
+    public abstract void init();
+    
+    public AssetDescriptor getAsset(){
+        if(assetDesc != null){
+            return assetDesc;
         }
         return null;
+    }
+    
+    public void setUserDate(String userData){
+        if(fixture != null){
+            fixture.setUserData(userData);
+        }
     }
 }

@@ -5,20 +5,14 @@
  */
 package com.disc.jammers;
 
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.disc.jammers.assets.AssetHolder;
 import com.disc.jammers.boxdisplay.BoxDisplay;
-import com.disc.jammers.boxdisplay.Disc;
-import com.disc.jammers.boxdisplay.Player;
-import com.disc.jammers.boxdisplay.players.PlayerScott;
 import com.disc.jammers.event.EventQueue;
 import com.disc.jammers.states.StateID;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  *
@@ -36,14 +30,14 @@ public class GameManager {
     public GameManager(World world, EventQueue queue) {
         assetManager = new AssetManager();
         box2dSprites = new ArrayList<BoxDisplay>();
-        assetHolder = new AssetHolder(world, queue);
+        assetHolder = new AssetHolder(world, queue, assetManager);
 
         this.eventQueue = queue;
         this.world = world;
 
         setBox2dSprite();
+
         initAssetManager();
-        assetManager.finishLoading();
     }
 
     public void handleEvents() {
@@ -79,15 +73,19 @@ public class GameManager {
     }
 
     private void initAssetManager() {
-        //Check Every elemets in boxsprite
+        //Sprites
         for (BoxDisplay sprite : box2dSprites) {
-            
-            //Check if it's null or empty
-            if (!sprite.getAssetList().isEmpty() || sprite.getAssetList() != null) {
-                for (AssetDescriptor desc : sprite.getAssetList()) {
-                    assetManager.load(desc);
-                }
+            if (sprite.getAsset() != null) {
+                assetManager.load(sprite.getAsset());
             }
         }
+
+        assetManager.finishLoading();
+        
+        //--TODO: Add Texture Atlas, Add Sound, Add Music
+        for (BoxDisplay sprite : box2dSprites) {
+            sprite.init();
+        }
+        
     }
 }

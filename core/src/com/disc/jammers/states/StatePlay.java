@@ -7,7 +7,6 @@ package com.disc.jammers.states;
 
 import com.disc.jammers.event.MyInputProcessor;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import static com.disc.jammers.Constant.WIDTH;
 import static com.disc.jammers.Constant.HEIGHT;
@@ -19,17 +18,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.disc.jammers.Constant;
 import com.disc.jammers.GameManager;
 import com.disc.jammers.GameStateManager;
-import com.disc.jammers.boxdisplay.Disc;
-import com.disc.jammers.event.EventMessage;
 import com.disc.jammers.event.EventQueue;
-import com.disc.jammers.event.EventType;
 import com.disc.jammers.event.MyContactListener;
 
 /**
@@ -106,25 +101,34 @@ public class StatePlay extends State {
         FixtureDef fdef = new FixtureDef();
         fdef.shape = shape;
         fdef.density = 1f;
-        fdef.filter.categoryBits = 2;
-        bottomBody.createFixture(fdef).setUserData("ground");
+        fdef.filter.categoryBits = Constant.BIT_BOUNDARY;
+        fdef.filter.maskBits = Constant.BIT_PLAYERS | Constant.BIT_DISC;
+        
+        bottomBody.createFixture(fdef).setUserData(Constant.BOUNDARY);
 
         //Top Part
         bodyDef.position.set((WIDTH / 2) / PIXEL_PER_METER, (HEIGHT - 100) / PIXEL_PER_METER);
         Body topBody = world.createBody(bodyDef);
-        topBody.createFixture(fdef).setUserData("celling");
+        topBody.createFixture(fdef).setUserData(Constant.BOUNDARY);;
         
         //Left Part
         bodyDef.position.set( 100 / PIXEL_PER_METER, (HEIGHT - 240) / PIXEL_PER_METER);
         Body leftBody = world.createBody(bodyDef);
         shape.setAsBox(2 / PIXEL_PER_METER, 150 / PIXEL_PER_METER);
-        leftBody.createFixture(fdef).setUserData("left wall");
+        leftBody.createFixture(fdef).setUserData(Constant.BOUNDARY);;
         
         
         //Right Side
         bodyDef.position.set( (WIDTH - 100) / PIXEL_PER_METER, (HEIGHT - 240) / PIXEL_PER_METER);
         Body rightBody = world.createBody(bodyDef);
-        rightBody.createFixture(fdef).setUserData("right wall");
+        rightBody.createFixture(fdef).setUserData(Constant.BOUNDARY);;
+        
+        //Middle
+        bodyDef.position.set( (WIDTH / 2) / PIXEL_PER_METER, (HEIGHT - 240) / PIXEL_PER_METER);
+        Body centerBody = world.createBody(bodyDef);        
+        fdef.filter.categoryBits = Constant.BIT_BOUNDARY_MID;
+        fdef.filter.maskBits = Constant.BIT_PLAYERS;
+        centerBody.createFixture(fdef).setUserData(Constant.BOUNDARY);;
         
         shape.dispose();
     }

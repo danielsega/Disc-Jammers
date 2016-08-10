@@ -10,9 +10,16 @@ package com.disc.jammers.event;
  * @author daniel
  */
 public enum EventType {
+    //--Inputs Events
     TOUCH_UP,
     TOUCH_DOWN,
     TOUCH_DRAGGED,
     KEY_UP,
     KEY_DOWN,
+    
+    //--Game Events
+    THROW_DISC,
+    STOP_DISC,
+    PLAYER_A_HAS_DISC,
+    PLAYER_B_HAS_DISC,
 }
