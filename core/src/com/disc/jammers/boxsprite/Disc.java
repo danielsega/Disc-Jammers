@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.disc.jammers.boxdisplay;
+package com.disc.jammers.boxsprite;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
@@ -27,7 +27,7 @@ import com.disc.jammers.event.EventType;
  *
  * @author daniel
  */
-public class Disc extends BoxDisplay {
+public class Disc extends BoxSprite {
 
     public boolean isCaught;
     public boolean isFlying;
@@ -54,8 +54,8 @@ public class Disc extends BoxDisplay {
     @Override
     public void handleEvents(EventMessage message) {
 
-        if (message.getMap().containsKey(EventType.TOUCH_UP)) {
-            discBody.setLinearVelocity(message.getIntArray(EventType.TOUCH_UP)[0] / PIXEL_PER_METER, message.getIntArray(EventType.TOUCH_UP)[1] / PIXEL_PER_METER);
+        if (message.getMap().containsKey(EventType.PLAYER_A_TOUCH_UP)) {
+            discBody.setLinearVelocity(message.getIntArray(EventType.PLAYER_A_TOUCH_UP)[0] / PIXEL_PER_METER, message.getIntArray(EventType.PLAYER_A_TOUCH_UP)[1] / PIXEL_PER_METER);
             isCaught = false;
         }
 
@@ -112,7 +112,7 @@ public class Disc extends BoxDisplay {
         FixtureDef fdef = new FixtureDef();
         fdef.shape = circle;
         //fdef.isSensor = true;
-        fdef.density = 1f;
+        fdef.density = .175f;
         fdef.friction = 0;
         fdef.restitution = 1f;
         fdef.filter.categoryBits = Constant.BIT_DISC;

@@ -5,7 +5,6 @@
  */
 package com.disc.jammers.event;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 /**
@@ -15,9 +14,11 @@ import com.badlogic.gdx.InputProcessor;
 public class MyInputProcessor implements InputProcessor {
 
     private EventQueue eventQueue;
+    private EventObject inputObject;
     
     public MyInputProcessor(EventQueue queue) {
         eventQueue = queue;
+        inputObject = new EventObject();
     }
 
     @Override
@@ -38,24 +39,24 @@ public class MyInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         int[] mouse = {screenX, screenY, pointer, button};
-        System.out.println("Touch Down: " + mouse[0] + " " + mouse[1] + " " + mouse[2] + " " + mouse[3]);
-        eventQueue.addEvent(new EventMessage(EventType.TOUCH_DOWN, mouse));
+        inputObject.setObject(mouse);
+        eventQueue.addEvent(new EventMessage(EventType.PLAYER_A_TOUCH_DOWN, inputObject));
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int[] mouse = {screenX, screenY, pointer, button};        
-        System.out.println("Touch Up: " + mouse[0] + " " + mouse[1] + " " + mouse[2] + " " + mouse[3]);
-        eventQueue.addEvent(new EventMessage(EventType.TOUCH_UP, mouse));
+        inputObject.setObject(mouse);
+        eventQueue.addEvent(new EventMessage(EventType.PLAYER_A_TOUCH_UP, inputObject));
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         int[] mouse = {screenX, screenY, pointer};        
-        System.out.println("Touch Dragged: " + mouse[0] + " " + mouse[1] + " " + mouse[2]);
-        eventQueue.addEvent(new EventMessage(EventType.TOUCH_DRAGGED, mouse));
+        inputObject.setObject(mouse);
+        eventQueue.addEvent(new EventMessage(EventType.PLAYER_A_TOUCH_DRAGGED, inputObject));
         return false;
     }
 

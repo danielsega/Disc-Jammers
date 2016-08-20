@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.disc.jammers.boxdisplay.players;
+package com.disc.jammers.boxsprite.players;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.disc.jammers.Constant;
 import static com.disc.jammers.Constant.PIXEL_PER_METER;
 import static com.disc.jammers.Constant.WIDTH;
-import com.disc.jammers.boxdisplay.Player;
 import com.disc.jammers.entity.Country;
 import com.disc.jammers.event.EventQueue;
 
@@ -25,8 +24,8 @@ import com.disc.jammers.event.EventQueue;
  */
 public class PlayerScott extends Player {
 
-    public PlayerScott(World world, EventQueue queue, AssetManager manager) {
-        super(world, queue, manager);
+    public PlayerScott(World world, EventQueue queue, AssetManager manager, int player) {
+        super(world, queue, manager, player);
 
         initData();
     }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.disc.jammers.boxdisplay;
+package com.disc.jammers.boxsprite;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
@@ -16,14 +16,14 @@ import com.disc.jammers.event.EventQueue;
  *
  * @author daniel
  */
-public abstract class BoxDisplay {
+public abstract class BoxSprite {
 
     protected AssetManager assetManager;
     protected EventQueue eventQueue;
     protected AssetDescriptor assetDesc;
     protected Fixture fixture;
     
-    public BoxDisplay(EventQueue queue, AssetManager manager) {
+    public BoxSprite(EventQueue queue, AssetManager manager) {
         eventQueue = queue;
         assetManager = manager;
     }

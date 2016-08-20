@@ -8,8 +8,8 @@ package com.disc.jammers;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
-import com.disc.jammers.assets.AssetHolder;
-import com.disc.jammers.boxdisplay.BoxDisplay;
+import com.disc.jammers.assets.AssetDirector;
+import com.disc.jammers.boxsprite.BoxSprite;
 import com.disc.jammers.event.EventQueue;
 import com.disc.jammers.states.StateID;
 import java.util.ArrayList;
@@ -23,14 +23,14 @@ public class GameManager {
     private final AssetManager assetManager;
 
     private EventQueue eventQueue;
-    private ArrayList<BoxDisplay> box2dSprites;
+    private ArrayList<BoxSprite> box2dSprites;
     private World world;
-    private AssetHolder assetHolder;
+    private AssetDirector assetHolder;
 
     public GameManager(World world, EventQueue queue) {
         assetManager = new AssetManager();
-        box2dSprites = new ArrayList<BoxDisplay>();
-        assetHolder = new AssetHolder(world, queue, assetManager);
+        box2dSprites = new ArrayList<BoxSprite>();
+        assetHolder = new AssetDirector(world, queue, assetManager);
 
         this.eventQueue = queue;
         this.world = world;
@@ -42,7 +42,7 @@ public class GameManager {
 
     public void handleEvents() {
         while (!eventQueue.getQueue().isEmpty()) {
-            for (BoxDisplay sprites : box2dSprites) {
+            for (BoxSprite sprites : box2dSprites) {
                 sprites.handleEvents(eventQueue.sendEvent());
             }
             eventQueue.removeEvent();
@@ -51,19 +51,19 @@ public class GameManager {
 
     public void update(float dt) {
         //--Update Every Box2dSprite
-        for (BoxDisplay sprites : box2dSprites) {
+        for (BoxSprite sprites : box2dSprites) {
             sprites.update(dt);
         }
     }
 
     public void render(SpriteBatch sb) {
-        for (BoxDisplay sprites : box2dSprites) {
+        for (BoxSprite sprites : box2dSprites) {
             sprites.render(sb);
         }
     }
 
     public void dispose() {
-        for (BoxDisplay sprites : box2dSprites) {
+        for (BoxSprite sprites : box2dSprites) {
             sprites.dispose();
         }
     }
@@ -74,7 +74,7 @@ public class GameManager {
 
     private void initAssetManager() {
         //Sprites
-        for (BoxDisplay sprite : box2dSprites) {
+        for (BoxSprite sprite : box2dSprites) {
             if (sprite.getAsset() != null) {
                 assetManager.load(sprite.getAsset());
             }
@@ -83,7 +83,7 @@ public class GameManager {
         assetManager.finishLoading();
         
         //--TODO: Add Texture Atlas, Add Sound, Add Music
-        for (BoxDisplay sprite : box2dSprites) {
+        for (BoxSprite sprite : box2dSprites) {
             sprite.init();
         }
         

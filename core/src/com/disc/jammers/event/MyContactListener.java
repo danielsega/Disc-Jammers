@@ -18,26 +18,32 @@ import com.disc.jammers.Constant;
 public class MyContactListener implements ContactListener {
 
     private EventQueue eventQueue;
-    
+    private EventObject contactObject;
+
     public MyContactListener(EventQueue queue) {
         eventQueue = queue;
+        contactObject = new EventObject();
     }
 
     @Override
     public void beginContact(Contact contact) {
-        if(discHitPlayer(contact)){
-            if(playerAHasDisc(contact)){
-                eventQueue.addEvent(new EventMessage(EventType.PLAYER_A_HAS_DISC, true));
-                eventQueue.addEvent(new EventMessage(EventType.STOP_DISC, null));
+        if (discHitPlayer(contact)) {
+            if (playerHasDiscChecker(contact, Constant.PLAYER_A)) {
+                playerHasDiscAction(EventType.PLAYER_A_HAS_DISC);
             }
-            
-            if(playerBHasDisc(contact)){
-                eventQueue.addEvent(new EventMessage(EventType.PLAYER_B_HAS_DISC, true));
-                eventQueue.addEvent(new EventMessage(EventType.STOP_DISC, null));
+
+            if (playerHasDiscChecker(contact, Constant.PLAYER_B)) {
+                playerHasDiscAction(EventType.PLAYER_B_HAS_DISC);
             }
         }
-        
-        
+
+        if (playerHitBoundary(contact, Constant.PLAYER_A)) {
+            eventQueue.addEvent(new EventMessage(EventType.STOP_PLAYER_A, null));
+        }
+
+        if (playerHitBoundary(contact, Constant.PLAYER_B)) {
+            eventQueue.addEvent(new EventMessage(EventType.STOP_PLAYER_B, null));
+        }
     }
 
     @Override
@@ -51,28 +57,33 @@ public class MyContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
     }
-    
-    private boolean playerAHasDisc(Contact contact){
-        return contact.getFixtureA().getUserData().equals(Constant.PLAYER_A) || contact.getFixtureB().getUserData().equals(Constant.PLAYER_A);
+
+    private boolean playerHasDiscChecker(Contact contact, final String player) {
+        return contact.getFixtureA().getUserData().equals(player) || contact.getFixtureB().getUserData().equals(player);
     }
-    
-    private boolean playerBHasDisc(Contact contact){
-        return contact.getFixtureA().getUserData().equals(Constant.PLAYER_B) || contact.getFixtureB().getUserData().equals(Constant.PLAYER_B);
+
+    private void playerHasDiscAction(EventType type) {
+        contactObject.setObject(true);
+        eventQueue.addEvent(new EventMessage(type, contactObject));
+        eventQueue.addEvent(new EventMessage(EventType.STOP_DISC, null));
     }
-    
-    private boolean discHitPlayer(Contact contact){
-        System.err.println(contact.getFixtureA().getUserData());
-        System.err.println(contact.getFixtureB().getUserData());
-        return     contact.getFixtureA().getUserData().equals(Constant.PLAYER_A) 
-                || contact.getFixtureA().getUserData().equals(Constant.PLAYER_B)
-                && contact.getFixtureB().getUserData().equals(Constant.DISC)
-                
-                ||
-                
-                   contact.getFixtureB().getUserData().equals(Constant.PLAYER_A)
-                || contact.getFixtureB().getUserData().equals(Constant.PLAYER_B)
-                && contact.getFixtureA().getUserData().equals(Constant.DISC)
-                ;
+
+    private boolean discHitPlayer(Contact contact) {
+
+        if (contact.getFixtureA().getUserData().equals(Constant.PLAYER_A) || contact.getFixtureA().getUserData().equals(Constant.PLAYER_B))
+            if (contact.getFixtureB().getUserData().equals(Constant.DISC)) return true;
+        if (contact.getFixtureB().getUserData().equals(Constant.PLAYER_A) || contact.getFixtureB().getUserData().equals(Constant.PLAYER_B))
+            if (contact.getFixtureA().getUserData().equals(Constant.DISC)) return true;
+        return false;
     }
-    
+
+    private boolean playerHitBoundary(Contact contact, final String player) {
+
+        if (contact.getFixtureA().getUserData().equals(player))
+            if (contact.getFixtureB().getUserData().equals(Constant.BOUNDARY)) return true;
+        if (contact.getFixtureB().getUserData().equals(player))
+            if (contact.getFixtureA().getUserData().equals(Constant.BOUNDARY)) return true;
+        return false;
+    }
+
 }
