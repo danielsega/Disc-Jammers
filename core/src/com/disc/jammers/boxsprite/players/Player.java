@@ -8,7 +8,6 @@ package com.disc.jammers.boxsprite.players;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -29,6 +28,8 @@ import com.disc.jammers.event.EventMessage;
 import com.disc.jammers.event.EventObject;
 import com.disc.jammers.event.EventQueue;
 import com.disc.jammers.event.EventType;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
@@ -139,9 +140,9 @@ public class Player extends BoxSprite {
                 hasDiscAction(message);
             }
 
-            if (message.getMap().containsKey(EventType.STOP_PLAYER_A)) {
+            /*if (message.getMap().containsKey(EventType.STOP_PLAYER_A)) {
                 playerBody.setLinearVelocity(0, 0);
-            }
+            }*/
 
         } else {
 
@@ -159,22 +160,16 @@ public class Player extends BoxSprite {
                 hasDiscAction(message);
             }
 
-            if (message.getMap().containsKey(EventType.STOP_PLAYER_B)) {
+            /*if (message.getMap().containsKey(EventType.STOP_PLAYER_B)) {
                 playerBody.setLinearVelocity(0, 0);
-            }
+            }*/
         }
 
     }
 
     @Override
     public void update(float dt) {
-        if (canMove) {
-            checkCollision(dt);
-        }
-
-        if (isSliding) {
-            //playerBody.setTransform(new Vector2(playerBody.getTransform().getPosition()).interpolate(slidingDest, dt * 2f, Interpolation.linear), playerBody.getAngle());
-        }
+        checkCollisionAndMovement(dt);
     }
 
     @Override
@@ -261,8 +256,6 @@ public class Player extends BoxSprite {
 
     private void playerTouchDown(EventMessage message) {
         destination.set(message.getIntArray(EventType.PLAYER_A_TOUCH_DOWN)[0] / PIXEL_PER_METER, (((HEIGHT) - message.getIntArray(EventType.PLAYER_A_TOUCH_DOWN)[1])) / PIXEL_PER_METER);
-        //TODO: set Speed
-        //impluseMovement.scl(2);
         canMove = true;
     }
 
@@ -273,20 +266,45 @@ public class Player extends BoxSprite {
     private void playerTouchDragged(EventMessage message) {
         slidingDest.set(message.getIntArray(EventType.PLAYER_A_TOUCH_DRAGGED)[0] / PIXEL_PER_METER, message.getIntArray(EventType.PLAYER_A_TOUCH_DRAGGED)[1] / PIXEL_PER_METER);
         isSliding = true;
+        canMove = false;
     }
 
-    private void checkCollision(float dt) {
+    private void checkCollisionAndMovement(float dt) {
         cretePlayerRec();
 
         if (playerRec.overlaps(midBound)) {
-            playerBody.setTransform(playerBody.getPosition().x - (1 / PIXEL_PER_METER), playerBody.getPosition().y, playerBody.getAngle());
-        } else if(playerRec.overlaps(lowerBound)){
-            playerBody.setTransform(playerBody.getPosition().x, playerBody.getPosition().y + (1 / PIXEL_PER_METER), playerBody.getAngle());
-        } else if(playerRec.overlaps(upperBound)){
-            playerBody.setTransform(playerBody.getPosition().x , playerBody.getPosition().y - (1 / PIXEL_PER_METER), playerBody.getAngle());
-        } else{
-            playerBody.setTransform(new Vector2(playerBody.getPosition()).interpolate(destination, dt /*TODO: Times Speed*/, Interpolation.linear), playerBody.getAngle());
+            playerBody.setLinearVelocity(-.1f, 0);
+        } else if (playerRec.overlaps(lowerBound)) {
+            playerBody.setLinearVelocity(0, +.1f);
+        } else if (playerRec.overlaps(upperBound)) {
+            playerBody.setLinearVelocity(0, -.1f);
+        } else if (canMove) {
+            float x = destination.x - playerBody.getPosition().x;
+            float y = destination.y - playerBody.getPosition().y;
+
+            playerBody.setLinearVelocity(getMoveStep(x, y, dt));
+        }else if (isSliding){
+            float x = destination.x - slidingDest.x;
+            float y = destination.y - slidingDest.y;
+            
+            playerBody.setLinearVelocity(x * -1 ,y);
         }
     }
 
+    private Vector2 getMoveStep(float x, float y, float dt) {
+
+        if (x < 0) {
+            x -= dt;
+        } else {
+            x += dt;
+        }
+
+        if (y < 0) {
+            y -= dt;
+        } else {
+            y += dt;
+        }
+
+        return new Vector2(x, y);
+    }
 }

@@ -37,13 +37,13 @@ public class MyContactListener implements ContactListener {
             }
         }
 
-        if (playerHitBoundary(contact, Constant.PLAYER_A)) {
+        /*if (playerHitBoundary(contact, Constant.PLAYER_A)) {
             eventQueue.addEvent(new EventMessage(EventType.STOP_PLAYER_A, null));
         }
 
         if (playerHitBoundary(contact, Constant.PLAYER_B)) {
             eventQueue.addEvent(new EventMessage(EventType.STOP_PLAYER_B, null));
-        }
+        }*/
     }
 
     @Override
@@ -77,13 +77,13 @@ public class MyContactListener implements ContactListener {
         return false;
     }
 
-    private boolean playerHitBoundary(Contact contact, final String player) {
+   /* private boolean playerHitBoundary(Contact contact, final String player) {
 
         if (contact.getFixtureA().getUserData().equals(player))
             if (contact.getFixtureB().getUserData().equals(Constant.BOUNDARY)) return true;
         if (contact.getFixtureB().getUserData().equals(player))
             if (contact.getFixtureA().getUserData().equals(Constant.BOUNDARY)) return true;
         return false;
-    }
+    }*/
 
 }
